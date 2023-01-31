@@ -22,5 +22,4 @@ jobs:
 
      #finally build your app with the latest command
       - name: Build and test with Maven
-        run: cd ./BackendAPI/simple-api-student-main/
-        run: mvn clean verify
+        run: cd ./BackendAPI/simple-api-student-main/ | mvn clean verify
