@@ -71,7 +71,7 @@ Most useful comande :
 docker-compose up
 ```
 
-```Dockerfile
+```yml
 version: '3.7'
 
 services:
@@ -129,3 +129,33 @@ docker push {{nom de l'image}}
 ## 2-1
 
 TestContainers sont des librairies java qui permtte d'utilisé des container docker pour réaliser des tests
+
+## 2-2
+
+```yml
+name: CI devops 2023
+on:
+  #to begin you want to launch this job in main and develop
+  push:
+    branches: 
+      - main # Activation des jobs lors du push sur la branche main
+  pull_request:
+
+jobs:
+  test-backend: 
+    runs-on: ubuntu-22.04 #Utilisation de l'image Ubuntu
+    steps:
+     #checkout your github code using actions/checkout@v2.5.0
+      - uses: actions/checkout@v2.5.0 
+
+     #do the same with another action (actions/setup-java@v3) that enable to setup jdk 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with: #use de l'action au dessus et définition de la version de java
+          java-version: '17'
+          distribution: 'adopt'
+
+     #finally build your app with the latest command
+      - name: Build and test with Maven
+        run: cd ./BackendAPI/simple-api-student-main/ && mvn clean verify #déplacement dans le bon dossier et on éxécute la commande mvn clean verify
+```
