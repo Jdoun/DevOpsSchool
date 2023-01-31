@@ -159,3 +159,8 @@ jobs:
       - name: Build and test with Maven
         run: cd ./BackendAPI/simple-api-student-main/ && mvn clean verify #déplacement dans le bon dossier et on éxécute la commande mvn clean verify
 ```
+### Document your quality gate configuration.
+
+![codecoverage](/images/codecoverage.png "Quality gate from sonar")
+
+On peut voir que notre gate configuration montre que notre code est couvert à 92.1%, il à 2 vulnérabilité de sécurité et il à 3 Security Review 
