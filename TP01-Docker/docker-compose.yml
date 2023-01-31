@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+    backend:
+        build:
+          context: ./BackendAPI
+          dockerfile: Dockerfile
+        networks:
+          - app-network
+        depends_on:
+          - database
+
+    database:
+        build:
+          context: ./Database
+          dockerfile: Dockerfile
+        networks:
+          - app-network
+        volumes:
+          - database-volume:/var/lib/postgresql/data
+          
+
+    httpd:
+        build:
+          context: ./HTTPServer
+          dockerfile: Dockerfile
+        ports:
+          - '80:80'
+        networks:
+          - app-network
+        depends_on:
+          - backend
+    
+networks:
+    app-network:
+      name: app-network
+      external: true
+
+volumes:
+    database-volume:
+      name: database-volume
+      external: true
