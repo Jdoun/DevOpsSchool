@@ -4,7 +4,7 @@
 
 ### DOCKERFILE
 
-```hs
+```cli
 FROM {{image}}
 
 ENV {{VALUE_CONTAINER}}={{value}}
@@ -159,8 +159,8 @@ jobs:
       - name: Build and test with Maven
         run: cd ./BackendAPI/simple-api-student-main/ && mvn clean verify #déplacement dans le bon dossier et on éxécute la commande mvn clean verify
 ```
-### Document your quality gate configuration.
+### 2-3 Document your quality gate configuration.
 
 ![codecoverage](/images/codecoverage.png "Quality gate from sonar")
 
-On peut voir que notre gate configuration montre que notre code est couvert à 92.1%, il à 2 vulnérabilité de sécurité et il à 3 Security Review 
+On peut voir que notre gate configuration montre que notre code est couvert à 92.1% ce qui veux dire que notre code passerais en prod et il serait valide, il à 2 vulnérabilité de sécurité qui nous indique donc qu'il faudrait que nous modifions ces points et il à 3 Security Review. ET il y 2 code alerte sur du code qui ne va pas être maintenue. 
