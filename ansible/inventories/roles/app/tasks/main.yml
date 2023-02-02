@@ -4,8 +4,10 @@
     docker_container:
       name: backend-green
       image: krouzet/backendapi
+      network_mode: app-network
   
   - name: Run Backend-blue
     docker_container:
       name: backend-blue
       image: krouzet/backendapi
+      network_mode: app-network

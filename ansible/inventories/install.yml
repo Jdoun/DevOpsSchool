@@ -2,8 +2,6 @@
   gather_facts: false
   become: yes
   roles:
-    - docker
-    - network
     - database
     - app
     - proxy

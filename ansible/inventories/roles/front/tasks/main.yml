@@ -4,4 +4,7 @@
     docker_container:
       name: front
       image: krouzet/front
+      network_mode: app-network
+      env:
+        VUE_APP_API_URL: "quentin.miguel-lopez.takima.cloud:8080"
   

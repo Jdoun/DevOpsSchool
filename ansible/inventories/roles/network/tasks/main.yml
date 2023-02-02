@@ -1,5 +1,18 @@
 ---
 # tasks file for roles/network
-  - name: create network
-    command:
-      cmd: docker network app-network
+- name: create network
+  community.docker.docker_network:
+    name: app-network
+    state: present
+    force: true
+  
+
+- name: Add a container to a network, leaving existing containers connected
+  community.docker.docker_network:
+    name: app-network
+    connected:
+      - cdatabse
+      - backend-green
+      - backend-blue
+      - front
+    appends: true

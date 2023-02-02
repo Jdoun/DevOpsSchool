@@ -4,3 +4,4 @@
     docker_container:
       name: database
       image: krouzet/database
+      network_mode: app-network

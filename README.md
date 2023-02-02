@@ -260,3 +260,5 @@ quentin.miguel-lopez.takima.cloud | CHANGED => {
     tags: docker
 
 ```
+
+Push sur le serveur réaliser mais le serveur ne fonctionnait pas lors du push à cause du sideloading qi prendrait trop de ram
