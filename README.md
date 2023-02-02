@@ -85,7 +85,7 @@ services:
           context: ./BackendAPI
           dockerfile: Dockerfile # lien vers le dockerfile du backend
         networks:
-          - app-network #network a qu''elle il est lié
+          - app-network #network lié au container
         depends_on:
           - database #de qu''elle container il dépends
 
@@ -94,7 +94,7 @@ services:
           context: ./Database
           dockerfile: Dockerfile # lien vers le dockerfile de la database
         networks:
-          - app-network #network a qu''elle il est lié
+          - app-network #network lié au container
         volumes:
           - database-volume:/var/lib/postgresql/data #volume utilisé
           
@@ -106,7 +106,7 @@ services:
         ports:
           - '80:80' #port exposer
         networks:
-          - app-network #network a qu''elle il est lié
+          - app-network #network lié au container
         depends_on:
           - backend #de qu''elle container il dépends
     
