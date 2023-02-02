@@ -1,6 +1,9 @@
-# TP1
+# Author
+Quentin Miguel lopez
 
-## 1-1
+# TP1 Discover Docker
+
+## 1-1 Document your database container essentials: commands and Dockerfile.
 
 ### DOCKERFILE
 
@@ -41,7 +44,7 @@ docker volume create database-volume
 
 ```
 
-## 1-2
+## 1-2 Why do we need a multistage build? And explain each step of this dockerfile.
 
 Nous avons besoin d'un multistagebuild car il faut d'abord compile le projet maven avec toute les dépendencie, puis ensuite il faut run le .jar obtenue pour lancer l'application
 
@@ -64,12 +67,14 @@ COPY --from=myapp-build $MYAPP_HOME/target/*.jar $MYAPP_HOME/myapp.jar
 ENTRYPOINT java -jar myapp.jar #execute le fichier jar compilé
 ```
 
-## 1-3
+## 1-3 Document docker-compose most important commands.
 
 Most useful comande :
+```hs
+docker-compose up #lancer les containers
+docker-compose build #build tout les container
 ```
-docker-compose up
-```
+## 1-4 Document your docker-compose file.
 
 ```yml
 version: '3.7'
@@ -117,7 +122,7 @@ volumes:
 
 ```
 
-## 1-5
+## 1-5 Document your publication commands and published images in dockerhub.
 
 ```
 docker tag {{nom de l'image}} {{nom du repository}}:{{numéro de version}}
@@ -125,12 +130,13 @@ docker tag {{nom de l'image}} {{nom du repository}}:{{numéro de version}}
 docker push {{nom de l'image}}
 ```
 
+# TP2 Discover Github Action
 
-## 2-1
+## 2-1 What are testcontainers?
 
-TestContainers sont des librairies java qui permtte d'utilisé des container docker pour réaliser des tests
+TestContainers sont des librairies java qui permette d'utilisé des container docker pour réaliser des tests
 
-## 2-2
+## 2-2 Document your Github Actions configurations.
 
 ```yml
 name: CI devops 2023
@@ -165,8 +171,9 @@ jobs:
 
 On peut voir que notre gate configuration montre que notre code est couvert à 92.1% ce qui veux dire que notre code passerais en prod et il serait valide, il à 2 vulnérabilité de sécurité qui nous indique donc qu'il faudrait que nous modifions ces points et il à 3 Security Review. ET il y 2 code alerte sur du code qui ne va pas être maintenue. 
 
+# TP3 Discover Ansible
 
-### 3-1 
+### 3-1 Document your inventory and base commands
 
 ```YML
 all:
@@ -213,7 +220,7 @@ quentin.miguel-lopez.takima.cloud | CHANGED => {
 
 ```
 
-### 3-2
+### 3-2 Document your playbook
 
 ```YML
 - hosts: all
@@ -261,4 +268,45 @@ quentin.miguel-lopez.takima.cloud | CHANGED => {
 
 ```
 
-Push sur le serveur réaliser mais le serveur ne fonctionnait pas lors du push à cause du sideloading qi prendrait trop de ram
+Push sur le serveur réaliser mais le serveur ne fonctionnait pas lors du push à cause du loadbalancer qi prendrait trop de ram
+
+### 3-3 Document your docker_container tasks configuration.
+
+```yml
+  - name: Run HTTPD #nom de la tache qui va séxecuter
+    docker_container:
+      name: httpd #nom du container sur docker
+      image: krouzet/httpserver #image à allez cherche rsur dockerhub
+      network_mode: app-network #network à lié au container
+      ports: #ports que l'on souhaite exposer ou non
+        - '80:80'
+        - '8080:8080'
+```
+## Front
+![acceuil](/images/acceuil.png "acceuil")
+
+![pagedepartement](/images/pagedepartement.png "page departement")
+
+# TP Extra
+
+Load balancing gérer avec les deux serveurs
+
+![containers](/images/doublecontainer.png "containers docker")
+
+pour activer il suffisait de changer le virtualhost est d'activer certain module
+```
+<VirtualHost *:8080>
+<Proxy "balancer://mycluster"> # définir les deux chemin de serveur
+    BalancerMember "http://backend-green:8080"
+    BalancerMember "http://backend-blue:8080"
+</Proxy>
+ProxyPass        "/" "balancer://mycluster/"
+ProxyPassReverse "/" "balancer://mycluster/"
+</VirtualHost>
+
+<VirtualHost *:80>
+ProxyPreserveHost On
+ProxyPass / http://front:80/
+ProxyPassReverse / http://front:80/
+</VirtualHost>
+```
