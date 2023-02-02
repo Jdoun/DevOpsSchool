@@ -1,0 +1,7 @@
+---
+# tasks file for roles/front
+  - name: Run front
+    docker_container:
+      name: front
+      image: krouzet/front
+  

@@ -1,0 +1,6 @@
+---
+# tasks file for roles/database
+  - name: Run Database
+    docker_container:
+      name: database
+      image: krouzet/database

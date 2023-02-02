@@ -164,3 +164,99 @@ jobs:
 ![codecoverage](/images/codecoverage.png "Quality gate from sonar")
 
 On peut voir que notre gate configuration montre que notre code est couvert à 92.1% ce qui veux dire que notre code passerais en prod et il serait valide, il à 2 vulnérabilité de sécurité qui nous indique donc qu'il faudrait que nous modifions ces points et il à 3 Security Review. ET il y 2 code alerte sur du code qui ne va pas être maintenue. 
+
+
+### 3-1 
+
+```YML
+all:
+ vars:
+   ansible_user: centos #os de la machine
+   ansible_ssh_private_key_file: ./id_rsa #chemin de la clé rsa
+ children:
+   prod:
+     hosts: quentin.miguel-lopez.takima.cloud # différents host impacté par le fichier yml
+```
+
+
+```
+ansible all -i inventories/setup.yml -m setup -a "filter=ansible_distribution*"
+
+quentin.miguel-lopez.takima.cloud | SUCCESS => {
+    "ansible_facts": {
+        "ansible_distribution": "CentOS",
+        "ansible_distribution_file_parsed": true,
+        "ansible_distribution_file_path": "/etc/centos-release",
+        "ansible_distribution_file_variety": "CentOS",
+        "ansible_distribution_major_version": "8",
+        "ansible_distribution_release": "Stream",
+        "ansible_distribution_version": "8",
+        "discovered_interpreter_python": "/usr/libexec/platform-python"
+    },
+    "changed": false
+}
+
+ansible all -i inventories/setup.yml -m yum -a "name=httpd state=absent" --become
+
+quentin.miguel-lopez.takima.cloud | CHANGED => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/libexec/platform-python"
+    },
+    "changed": true,
+    "msg": "",
+    "rc": 0,
+    "results": [
+        "Removed: mod_http2-1.15.7-5.module_el8.6.0+1111+ce6f4ceb.x86_64",
+        "Removed: httpd-2.4.37-47.module_el8.6.0+1111+ce6f4ceb.1.x86_64"
+    ]
+}
+
+```
+
+### 3-2
+
+```YML
+- hosts: all
+  gather_facts: false
+  become: yes
+  roles:
+    - docker
+
+# Install Docker
+  tasks:
+  - name: Clean packages
+    command:
+      cmd: dnf clean -y packages
+
+  - name: Install device-mapper-persistent-data
+    dnf:
+      name: device-mapper-persistent-data
+      state: latest
+
+  - name: Install lvm2
+    dnf:
+      name: lvm2
+      state: latest
+
+  - name: add repo docker
+    command:
+      cmd: sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+
+  - name: Install Docker
+    dnf:
+      name: docker-ce
+      state: present
+
+  - name: install python3
+    dnf:
+      name: python3
+
+  - name: Pip install
+    pip:
+      name: docker
+
+  - name: Make sure Docker is running
+    service: name=docker state=started
+    tags: docker
+
+```
