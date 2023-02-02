@@ -134,7 +134,7 @@ docker push {{nom de l'image}}
 
 ## 2-1 What are testcontainers?
 
-TestContainers sont des librairies java qui permette d'utilisé des container docker pour réaliser des tests
+TestContainers sont des librairies java qui permette d'utilisé des container docker pour réaliser des tests unitaires
 
 ## 2-2 Document your Github Actions configurations.
 
